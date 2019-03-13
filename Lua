@@ -1,0 +1,273 @@
+local getUi = ui.get
+local getAll = entity.get_all
+local getProp = entity.get_prop
+local renderCircle = renderer.circle
+local renderLine = renderer.line
+local visibility = ui.set_visible
+local checkbox = ui.new_checkbox
+local colorpicker = ui.new_color_picker
+local slider = ui.new_slider
+local combobox = ui.new_combobox
+local worldToScreen = renderer.world_to_screen
+local callback = client.set_event_callback
+
+local stylebox = combobox("Lua", "A", "Style", "Circle", "Box", "Triangle")
+
+local heGrenadeCheckbox = checkbox("Lua", "A", "He")
+local heGrenadeColor = colorpicker("Lua", "A", "He", 255, 255, 255, 255)
+local heGrenadeSize = slider("Lua", "A", "Size", 0, 81, 9)
+
+local flashGrenadeCheckbox = checkbox("Lua", "A", "Flash")
+local flashGrenadeColor = colorpicker("Lua", "A", "Flash", 255, 255, 255, 255)
+local flashGrenadeSize = slider("Lua", "A", "Size", 0, 81, 9)
+
+local function on_paintGrenade(ctx)
+	local grenade = getAll("CBaseCSGrenadeProjectile")[1]
+	local index = getProp(grenade, "m_nModelIndex")
+
+	if getUi(stylebox) == "Circle" then
+		if getUi(heGrenadeCheckbox, true) then
+			visibility(heGrenadeSize, true)
+		else
+			visibility(heGrenadeSize, false)
+		end
+
+		if getUi(flashGrenadeCheckbox, true) then
+			visibility(flashGrenadeSize, true)
+		else
+			visibility(flashGrenadeSize, false)
+		end
+
+		if getUi(heGrenadeCheckbox, true) and index == 323 then
+			if grenade ~= nil then
+				local hex, hey, hez = getProp(grenade, "m_vecOrigin")
+				local hewx, hewy = worldToScreen(hex, hey, hez)
+
+				if hewx ~= nil then
+					local her, heg, heb, hea = getUi(heGrenadeColor)
+					local hesize = getUi(heGrenadeSize)
+
+					renderCircle(hewx, hewy, her, heg, heb, hea, hesize, 0, 1)
+				end
+			end
+		end
+
+		if getUi(flashGrenadeCheckbox, true) and index == 324 then
+			if grenade ~= nil then
+				local fx, fy, fz = getProp(grenade, "m_vecOrigin")
+				local fwx, fwy = worldToScreen(fx, fy, fz)
+
+				if fwx ~= nil then
+					local fr, fg, fb, fa = getUi(flashGrenadeColor)
+					local fsize = getUi(flashGrenadeSize)
+
+					renderCircle(fwx, fwy, fr, fg, fb, fa, fsize, 0, 1)
+				end
+			end
+		end
+	elseif getUi(stylebox) == "Box" then
+		visibility(heGrenadeSize, false)
+		visibility(flashGrenadeSize, false)
+
+		if getUi(heGrenadeCheckbox, true) and index == 323 then
+			if grenade ~= nil then
+				local hex, hey, hez = getProp(grenade, "m_vecOrigin")
+				local hewx, hewy = worldToScreen(hex, hey, hez)
+
+				if hewx ~= nil then
+					local her, heg, heb, hea = getUi(heGrenadeColor)
+					local hesize = getUi(heGrenadeSize)
+
+					renderLine(hewx - 10, hewy - 10, hewx + 10, hewy - 10, her, heg, heb, hea)
+					renderLine(hewx - 10, hewy - 10, hewx - 10, hewy + 10, her, heg, heb, hea)
+					renderLine(hewx + 10, hewy - 10, hewx + 10, hewy + 10, her, heg, heb, hea)
+					renderLine(hewx + 10, hewy + 10, hewx + 10, hewy - 10, her, heg, heb, hea)
+				end
+			end
+		end
+
+		if getUi(flashGrenadeCheckbox, true) and index == 324 then
+			if grenade ~= nil then
+				local fx, fy, fz = getProp(grenade, "m_vecOrigin")
+				local fwx, fwy = worldToScreen(fx, fy, fz)
+
+				if fwx ~= nil then
+					local fr, fg, fb, fa = getUi(flashGrenadeColor)
+					local fsize = getUi(flashGrenadeSize)
+
+					renderLine(fwx - 10, fwy - 10, fwx + 10, fwy - 10, fr, fg, fb, fa)
+					renderLine(fwx - 10, fwy - 10, fwx - 10, fwy + 10, fr, fg, fb, fa)
+					renderLine(fwx + 10, fwy - 10, fwx + 10, fwy + 10, fr, fg, fb, fa)
+					renderLine(fwx + 10, fwy + 10, fwx + 10, fwy - 10, fr, fg, fb, fa)
+				end
+			end
+		end
+	elseif getUi(stylebox) == "Triangle" then
+		visibility(heGrenadeSize, false)
+		visibility(flashGrenadeSize, false)
+
+		if getUi(heGrenadeCheckbox, true) and index == 323 then
+			if grenade ~= nil then
+				local hex, hey, hez = getProp(grenade, "m_vecOrigin")
+				local hewx, hewy = worldToScreen(hex, hey, hez)
+
+				if hewx ~= nil then
+					local her, heg, heb, hea = getUi(heGrenadeColor)
+					local hesize = getUi(heGrenadeSize)
+
+					renderLine(hewx, hewy - 10, hewx - 10, hewy + 10, her, heg, heb, hea)
+					renderLine(hewx, hewy - 10, hewx + 10, hewy + 10, her, heg, heb, hea)
+					renderLine(hewx - 10, hewy + 10, hewx + 10, hewy + 10, her, heg, heb, hea)
+				end
+			end
+		end
+
+		if getUi(flashGrenadeCheckbox, true) and index == 324 then
+			if grenade ~= nil then
+				local fx, fy, fz = getProp(grenade, "m_vecOrigin")
+				local fwx, fwy = worldToScreen(fx, fy, fz)
+
+				if fwx ~= nil then
+					local fr, fg, fb, fa = getUi(flashGrenadeColor)
+					local fsize = getUi(flashGrenadeSize)
+
+					renderLine(fwx, fwy - 10, fwx - 10, fwy + 10, fr, fg, fb, fa)
+					renderLine(fwx, fwy - 10, fwx + 10, fwy + 10, fr, fg, fb, fa)
+					renderLine(fwx - 10, fwy + 10, fwx + 10, fwy + 10, fr, fg, fb, fa)
+				end
+			end
+		end
+	end
+end
+
+callback('paint', on_paintGrenade)
+
+local molotovGrenadeCheckbox = checkbox("Lua", "A", "Molotov")
+local molotovGrenadeColor = colorpicker("Lua", "A", "Molotov", 255, 255, 255, 255)
+local molotovGrenadeSize = slider("Lua", "A", "Size", 0, 81, 9)
+
+local function on_paintMolotov(ctx)
+	if getUi(molotovGrenadeCheckbox, true) then
+		local molotovGrenade = getAll("CMolotovProjectile")[1]
+
+		if getUi(stylebox) == "Circle" then
+			visibility(molotovGrenadeSize, true)
+
+			if molotovGrenade ~= nil then
+				local mx, my, mz = getProp(molotovGrenade, "m_vecOrigin")
+				local mwx, mwy = worldToScreen(mx, my, mz)
+
+				if mwx ~= nile then
+					local mr, mg, mb, ma = getUi(molotovGrenadeColor)
+					local msize = getUi(molotovGrenadeSize)
+
+					renderCircle(mwx, mwy, mr, mg, mb, ma, msize, 0, 1)
+				end
+			end
+		elseif getUi(stylebox) == "Box" then
+			visibility(molotovGrenadeSize, false)
+
+			if molotovGrenade ~= nil then
+				local mx, my, mz = getProp(molotovGrenade, "m_vecOrigin")
+				local mwx, mwy = worldToScreen(mx, my, mz)
+
+				if mwx ~= nile then
+					local mr, mg, mb, ma = getUi(molotovGrenadeColor)
+					local msize = getUi(molotovGrenadeSize)
+
+					renderLine(mwx - 10, mwy - 10, mwx + 10, mwy - 10, mr, mg, mb, ma)
+					renderLine(mwx - 10, mwy - 10, mwx - 10, mwy + 10, mr, mg, mb, ma)
+					renderLine(mwx + 10, mwy - 10, mwx + 10, mwy + 10, mr, mg, mb, ma)
+					renderLine(mwx + 10, mwy + 10, mwx + 10, mwy - 10, mr, mg, mb, ma)
+				end
+			end
+		elseif getUi(stylebox) == "Triangle" then
+			visibility(molotovGrenadeSize, false)
+
+			if molotovGrenade ~= nil then
+				local mx, my, mz = getProp(molotovGrenade, "m_vecOrigin")
+				local mwx, mwy = worldToScreen(mx, my, mz)
+
+				if mwx ~= nile then
+					local mr, mg, mb, ma = getUi(molotovGrenadeColor)
+					local msize = getUi(molotovGrenadeSize)
+
+					renderLine(mwx, mwy - 10, mwx - 10, mwy + 10, mr, mg, mb, ma)
+					renderLine(mwx, mwy - 10, mwx + 10, mwy + 10, mr, mg, mb, ma)
+					renderLine(mwx - 10, mwy + 10, mwx + 10, mwy + 10, mr, mg, mb, ma)
+				end
+			end
+		end
+	else
+		visibility(molotovGrenadeSize, false)
+	end
+end
+
+callback('paint', on_paintMolotov)
+
+local smokeGrenadeCheckbox = checkbox("Lua", "A", "Smoke")
+local smokeGrenadeColor = colorpicker("Lua", "A", "Smoke", 255, 255, 255, 255)
+local smokeGrenadeSize = slider("Lua", "A", "Size", 0, 81, 9)
+
+local function on_paintSmoke(ctx)
+	if getUi(smokeGrenadeCheckbox, true) then
+		local smokeGrenade = getAll("CSmokeGrenadeProjectile")[1]
+		local ticks_created = getProp(grenade, "m_nSmokeEffectTickBegin")
+
+		if getUi(stylebox) == "Circle" then
+			visibility(smokeGrenadeSize, true)
+
+			if smokeGrenade ~= nil then
+				local sx, sy, sz = getProp(smokeGrenade, "m_vecOrigin")
+				local swx, swy = worldToScreen(sx, sy, sz)
+
+				if swx ~= nil then
+					local sr, sg, sb, sa = getUi(smokeGrenadeColor)
+					local ssize = getUi(smokeGrenadeSize)
+
+					renderCircle(swx, swy, sr, sg, sb, sa, ssize, 0, 1)
+				elseif ticks_created ~= nil then
+				end
+			end
+		elseif getUi(stylebox) == "Box" then
+			visibility(smokeGrenadeSize, false)
+
+			if smokeGrenade ~= nil then
+				local sx, sy, sz = getProp(smokeGrenade, "m_vecOrigin")
+				local swx, swy = worldToScreen(sx, sy, sz)
+
+				if swx ~= nil then
+					local sr, sg, sb, sa = getUi(smokeGrenadeColor)
+					local ssize = getUi(smokeGrenadeSize)
+
+					renderLine(swx - 10, swy - 10, swx + 10, swy - 10, sr, sg, sb, sa)
+					renderLine(swx - 10, swy - 10, swx - 10, swy + 10, sr, sg, sb, sa)
+					renderLine(swx + 10, swy - 10, swx + 10, swy + 10, sr, sg, sb, sa)
+					renderLine(swx + 10, swy + 10, swx + 10, swy - 10, sr, sg, sb, sa)
+				elseif ticks_created ~= nil then
+				end
+			end
+		elseif getUi(stylebox) == "Triangle" then
+			visibility(smokeGrenadeSize, false)
+
+			if smokeGrenade ~= nil then
+				local sx, sy, sz = getProp(smokeGrenade, "m_vecOrigin")
+				local swx, swy = worldToScreen(sx, sy, sz)
+
+				if swx ~= nil then
+					local sr, sg, sb, sa = getUi(smokeGrenadeColor)
+					local ssize = getUi(smokeGrenadeSize)
+
+					renderLine(swx, swy - 10, swx - 10, swy + 10, sr, sg, sb, sa)
+					renderLine(swx, swy - 10, swx + 10, swy + 10, sr, sg, sb, sa)
+					renderLine(swx - 10, swy + 10, swx + 10, swy + 10, sr, sg, sb, sa)
+				elseif ticks_created ~= nil then
+				end
+			end
+		end
+	else
+		visibility(smokeGrenadeSize, false)
+	end
+end
+
+callback('paint', on_paintSmoke)
