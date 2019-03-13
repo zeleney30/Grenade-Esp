@@ -81,7 +81,7 @@ local function on_paintGrenade(ctx)
 					renderLine(hewx - 10, hewy - 10, hewx + 10, hewy - 10, her, heg, heb, hea)
 					renderLine(hewx - 10, hewy - 10, hewx - 10, hewy + 10, her, heg, heb, hea)
 					renderLine(hewx + 10, hewy - 10, hewx + 10, hewy + 10, her, heg, heb, hea)
-					renderLine(hewx + 10, hewy + 10, hewx + 10, hewy - 10, her, heg, heb, hea)
+					renderLine(hewx - 10, hewy + 10, hewx + 10, hewy + 10, her, heg, heb, hea)
 				end
 			end
 		end
@@ -98,7 +98,7 @@ local function on_paintGrenade(ctx)
 					renderLine(fwx - 10, fwy - 10, fwx + 10, fwy - 10, fr, fg, fb, fa)
 					renderLine(fwx - 10, fwy - 10, fwx - 10, fwy + 10, fr, fg, fb, fa)
 					renderLine(fwx + 10, fwy - 10, fwx + 10, fwy + 10, fr, fg, fb, fa)
-					renderLine(fwx + 10, fwy + 10, fwx + 10, fwy - 10, fr, fg, fb, fa)
+					renderLine(fwx - 10, fwy + 10, fwx + 10, fwy + 10, fr, fg, fb, fa)
 				end
 			end
 		end
@@ -178,7 +178,7 @@ local function on_paintMolotov(ctx)
 					renderLine(mwx - 10, mwy - 10, mwx + 10, mwy - 10, mr, mg, mb, ma)
 					renderLine(mwx - 10, mwy - 10, mwx - 10, mwy + 10, mr, mg, mb, ma)
 					renderLine(mwx + 10, mwy - 10, mwx + 10, mwy + 10, mr, mg, mb, ma)
-					renderLine(mwx + 10, mwy + 10, mwx + 10, mwy - 10, mr, mg, mb, ma)
+					renderLine(mwx - 10, mwy + 10, mwx + 10, mwy + 10, mr, mg, mb, ma)
 				end
 			end
 		elseif getUi(stylebox) == "Triangle" then
@@ -243,7 +243,7 @@ local function on_paintSmoke(ctx)
 					renderLine(swx - 10, swy - 10, swx + 10, swy - 10, sr, sg, sb, sa)
 					renderLine(swx - 10, swy - 10, swx - 10, swy + 10, sr, sg, sb, sa)
 					renderLine(swx + 10, swy - 10, swx + 10, swy + 10, sr, sg, sb, sa)
-					renderLine(swx + 10, swy + 10, swx + 10, swy - 10, sr, sg, sb, sa)
+					renderLine(swx - 10, swy + 10, swx + 10, swy + 10, sr, sg, sb, sa)
 				elseif ticks_created ~= nil then
 				end
 			end
