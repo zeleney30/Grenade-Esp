@@ -14,7 +14,7 @@ local combobox = ui.new_combobox
 local worldToScreen = renderer.world_to_screen
 local callback = client.set_event_callback
 
-local stylebox = combobox("Lua", "A", "Style", "Circle", "Circle outline", "Box", "Box outline", "Triangle")
+local stylebox = combobox("Lua", "A", "Style", "Circle", "Circle outline", "Box", "Box outline", "Triangle", "Inverted triangle", "Pentagon")
 
 local heGrenadeCheckbox = checkbox("Lua", "A", "Grenade")
 local heGrenadeColor = colorpicker("Lua", "A", "Grenade", 255, 255, 255, 255)
@@ -253,6 +253,98 @@ local function on_paintGrenade(ctx)
 				end
 			end
 		end
+	elseif getUi(stylebox) == "Inverted triangle" then
+		if getUi(heGrenadeCheckbox, true) then
+			visibility(heGrenadeSize, true)
+		else
+			visibility(heGrenadeSize, false)
+		end
+
+		if getUi(flashGrenadeCheckbox, true) then
+			visibility(flashGrenadeSize, true)
+		else
+			visibility(flashGrenadeSize, false)
+		end
+
+		if getUi(heGrenadeCheckbox, true) and index == 323 then
+			if grenade ~= nil then
+				local hex, hey, hez = getProp(grenade, "m_vecOrigin")
+				local hewx, hewy = worldToScreen(hex, hey, hez)
+
+				if hewx ~= nil then
+					local her, heg, heb, hea = getUi(heGrenadeColor)
+					local hesize = getUi(heGrenadeSize)
+
+					renderLine(hewx, hewy + hesize, hewx - hesize, hewy - hesize, her, heg, heb, hea)
+					renderLine(hewx, hewy + hesize, hewx + hesize, hewy - hesize, her, heg, heb, hea)
+					renderLine(hewx - hesize, hewy - hesize, hewx + hesize, hewy - hesize, her, heg, heb, hea)
+				end
+			end
+		end
+
+		if getUi(flashGrenadeCheckbox, true) and index == 324 then
+			if grenade ~= nil then
+				local fx, fy, fz = getProp(grenade, "m_vecOrigin")
+				local fwx, fwy = worldToScreen(fx, fy, fz)
+
+				if fwx ~= nil then
+					local fr, fg, fb, fa = getUi(flashGrenadeColor)
+					local fsize = getUi(flashGrenadeSize)
+
+					renderLine(fwx, fwy + fsize, fwx - fsize, fwy - fsize, fr, fg, fb, fa)
+					renderLine(fwx, fwy + fsize, fwx + fsize, fwy - fsize, fr, fg, fb, fa)
+					renderLine(fwx - fsize, fwy - fsize, fwx + fsize, fwy - fsize, fr, fg, fb, fa)
+				end
+			end
+		end
+	elseif getUi(stylebox) == "Pentagon" then
+		if getUi(heGrenadeCheckbox, true) then
+			visibility(heGrenadeSize, true)
+		else
+			visibility(heGrenadeSize, false)
+		end
+
+		if getUi(flashGrenadeCheckbox, true) then
+			visibility(flashGrenadeSize, true)
+		else
+			visibility(flashGrenadeSize, false)
+		end
+
+		if getUi(heGrenadeCheckbox, true) and index == 323 then
+			if grenade ~= nil then
+				local hex, hey, hez = getProp(grenade, "m_vecOrigin")
+				local hewx, hewy = worldToScreen(hex, hey, hez)
+
+				if hewx ~= nil then
+					local her, heg, heb, hea = getUi(heGrenadeColor)
+					local hesize = getUi(heGrenadeSize)
+
+					renderLine(hewx, hewy - hesize, hewx - hesize, hewy - 5 + hesize / 10, her, heg, heb, hea)
+					renderLine(hewx, hewy - hesize, hewx + hesize, hewy - 5 + hesize / 10, her, heg, heb, hea)
+					renderLine(hewx - hesize, hewy - 5 + hesize / 10, hewx - hesize / 2, hewy + hesize, her, heg, heb, hea)
+					renderLine(hewx + hesize, hewy - 5 + hesize / 10, hewx + hesize / 2, hewy + hesize, her, heg, heb, hea)
+					renderLine(hewx - hesize / 2, hewy + hesize, hewx + hesize / 2, hewy + hesize, her, heg, heb, hea)
+				end
+			end
+		end
+
+		if getUi(flashGrenadeCheckbox, true) and index == 324 then
+			if grenade ~= nil then
+				local fx, fy, fz = getProp(grenade, "m_vecOrigin")
+				local fwx, fwy = worldToScreen(fx, fy, fz)
+
+				if fwx ~= nil then
+					local fr, fg, fb, fa = getUi(flashGrenadeColor)
+					local fsize = getUi(flashGrenadeSize)
+
+					renderLine(fwx, fwy - fsize, fwx - fsize, fwy - 5 + fsize / 10, fr, fg, fb, fa)
+					renderLine(fwx, fwy - fsize, fwx + fsize, fwy - 5 + fsize / 10, fr, fg, fb, fa)
+					renderLine(fwx - fsize, fwy - 5 + fsize / 10, fwx - fsize / 2, fwy + fsize, fr, fg, fb, fa)
+					renderLine(fwx + fsize, fwy - 5 + fsize / 10, fwx + fsize / 2, fwy + fsize, fr, fg, fb, fa)
+					renderLine(fwx - fsize / 2, fwy + fsize, fwx + fsize / 2, fwy + fsize, fr, fg, fb, fa)
+				end
+			end
+		end
 	end
 end
 
@@ -335,6 +427,36 @@ local function on_paintMolotov(ctx)
 					renderLine(mwx, mwy - msize, mwx - msize, mwy + msize, mr, mg, mb, ma)
 					renderLine(mwx, mwy - msize, mwx + msize, mwy + msize, mr, mg, mb, ma)
 					renderLine(mwx - msize, mwy + msize, mwx + msize, mwy + msize, mr, mg, mb, ma)
+				end
+			end
+		elseif getUi(stylebox) == "Inverted triangle" then
+			if molotovGrenade ~= nil then
+				local mx, my, mz = getProp(molotovGrenade, "m_vecOrigin")
+				local mwx, mwy = worldToScreen(mx, my, mz)
+
+				if mwx ~= nile then
+					local mr, mg, mb, ma = getUi(molotovGrenadeColor)
+					local msize = getUi(molotovGrenadeSize)
+
+					renderLine(mwx, mwy + msize, mwx - msize, mwy - msize, mr, mg, mb, ma)
+					renderLine(mwx, mwy + msize, mwx + msize, mwy - msize, mr, mg, mb, ma)
+					renderLine(mwx - msize, mwy - msize, mwx + msize, mwy - msize, mr, mg, mb, ma)
+				end
+			end
+		elseif getUi(stylebox) == "Pentagon" then
+			if molotovGrenade ~= nil then
+				local mx, my, mz = getProp(molotovGrenade, "m_vecOrigin")
+				local mwx, mwy = worldToScreen(mx, my, mz)
+
+				if mwx ~= nile then
+					local mr, mg, mb, ma = getUi(molotovGrenadeColor)
+					local msize = getUi(molotovGrenadeSize)
+
+					renderLine(mwx, mwy - msize, mwx - msize, mwy - 5 + msize / 10, mr, mg, mb, ma)
+					renderLine(mwx, mwy - msize, mwx + msize, mwy - 5 + msize / 10, mr, mg, mb, ma)
+					renderLine(mwx - msize, mwy - 5 + msize / 10, mwx - msize / 2, mwy + msize, mr, mg, mb, ma)
+					renderLine(mwx + msize, mwy - 5 + msize / 10, mwx + msize / 2, mwy + msize, mr, mg, mb, ma)
+					renderLine(mwx - msize / 2, mwy + msize, mwx + msize / 2, mwy + msize, mr, mg, mb, ma)
 				end
 			end
 		end
@@ -432,6 +554,38 @@ local function on_paintSmoke(ctx)
 				elseif ticks_created ~= nil then
 				end
 			end
+		elseif getUi(stylebox) == "Inverted triangle" then
+			if smokeGrenade ~= nil then
+				local sx, sy, sz = getProp(smokeGrenade, "m_vecOrigin")
+				local swx, swy = worldToScreen(sx, sy, sz)
+
+				if swx ~= nil then
+					local sr, sg, sb, sa = getUi(smokeGrenadeColor)
+					local ssize = getUi(smokeGrenadeSize)
+
+					renderLine(swx, swy + ssize, swx - ssize, swy - ssize, sr, sg, sb, sa)
+					renderLine(swx, swy + ssize, swx + ssize, swy - ssize, sr, sg, sb, sa)
+					renderLine(swx - ssize, swy - ssize, swx + ssize, swy - ssize, sr, sg, sb, sa)
+				elseif ticks_created ~= nil then
+				end
+			end
+		elseif getUi(stylebox) == "Pentagon" then
+			if smokeGrenade ~= nil then
+				local sx, sy, sz = getProp(smokeGrenade, "m_vecOrigin")
+				local swx, swy = worldToScreen(sx, sy, sz)
+
+				if swx ~= nil then
+					local sr, sg, sb, sa = getUi(smokeGrenadeColor)
+					local ssize = getUi(smokeGrenadeSize)
+
+					renderLine(swx, swy - ssize, swx - ssize, swy - 5 + ssize / 10, sr, sg, sb, sa)
+					renderLine(swx, swy - ssize, swx + ssize, swy - 5 + ssize / 10, sr, sg, sb, sa)
+					renderLine(swx - ssize, swy - 5 + ssize / 10, swx - ssize / 2, swy + ssize, sr, sg, sb, sa)
+					renderLine(swx + ssize, swy - 5 + ssize / 10, swx + ssize / 2, swy + ssize, sr, sg, sb, sa)
+					renderLine(swx - ssize / 2, swy + ssize, swx + ssize / 2, swy + ssize, sr, sg, sb, sa)
+				elseif ticks_created ~= nil then
+				end
+			end
 		end
 	else
 		visibility(smokeGrenadeSize, false)
@@ -461,6 +615,8 @@ local function on_paintText(ctx)
 	end
 
 	if getUi(flashTextCheckbox, true) then
+		local grenade = getAll("CBaseCSGrenadeProjectile")[1]
+		local index = getProp(grenade, "m_nModelIndex")
 		if index == 324 then
 			if grenade ~= nil then
 				local fx, fy, fz = getProp(grenade, "m_vecOrigin")
