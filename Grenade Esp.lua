@@ -14,7 +14,7 @@ local multibox = ui.new_multiselect
 local worldToScreen = renderer.world_to_screen
 local callback = client.set_event_callback
 
-local styleMultibox = multibox("Lua", "A", "Style", "Circle", "Circle outline", "Box", "Box outline", "Triangle", "Inverted triangle", "Pentagon", "Diamond")
+local styleMultibox = multibox("Lua", "A", "Style", "Circle", "Circle outline", "Box", "Box outline", "Triangle", "Inverted triangle", "Pentagon", "Octagon", "Diamond")
 
 local function contains(table, val)
 	for l=1,#table do
@@ -41,6 +41,8 @@ local heInvertedTriangleSize = slider("Lua", "A", "Inverted triangle size", 0, 8
 local heInvertedTriangleColor = colorpicker("Lua", "A", "Inverted triangle size", 0, 81, 9)
 local hePentagonSize = slider("Lua", "A", "Pentagon size", 0, 81, 9)
 local hePentagonColor = colorpicker("Lua", "A", "Pentagon size", 0, 81, 9)
+local heOctagonSize = slider("Lua", "A", "Octagon size", 0, 81, 9)
+local heOctagonColor = colorpicker("Lua", "A", "Octagon size", 255, 255, 255, 255)
 local heDiamondSize = slider("Lua", "A", "Diamond size", 0, 81, 9)
 local heDiamondColor = colorpicker("Lua", "A", "Diamond size", 0, 81, 9)
 local heTextCheckbox = checkbox("Lua", "A", "Grenade text")
@@ -61,6 +63,8 @@ local fInvertedTriangleSize = slider("Lua", "A", "Inverted triangle size", 0, 81
 local fInvertedTriangleColor = colorpicker("Lua", "A", "Inverted triangle size", 255, 255, 255, 255)
 local fPentagonSize = slider("Lua", "A", "Pentagon Size", 0, 81, 9)
 local fPentagonColor = colorpicker("Lua", "A", "Pentagon size", 255, 255, 255, 255)
+local fOctagonSize = slider("Lua", "A", "Octagon size", 0, 81, 9)
+local fOctagonColor = colorpicker("Lua", "A", "Octagon size", 255, 255, 255, 255)
 local fDiamondSize = slider("Lua", "A", "Diamond size", 0, 81, 9)
 local fDiamondColor = colorpicker("Lua", "A", "Diamond size", 255, 255, 255, 255)
 local fTextCheckbox = checkbox("Lua", "A", "Flash text")
@@ -128,6 +132,14 @@ local function on_paintGrenade(ctx)
 			visibility(hePentagonColor, false)
 		end
 
+		if contains(stylebox, "Octagon") then
+			visibility(heOctagonSize, true)
+			visibility(heOctagonColor, true)
+		else
+			visibility(heOctagonSize, false)
+			visibility(heOctagonColor, false)
+		end
+
 		if contains(stylebox, "Diamond") then
 			visibility(heDiamondSize, true)
 			visibility(heDiamondColor, true)
@@ -150,6 +162,8 @@ local function on_paintGrenade(ctx)
 		visibility(heInvertedTriangleColor, false)
 		visibility(hePentagonSize, false)
 		visibility(hePentagonColor, false)
+		visibility(heOctagonSize, false)
+		visibility(heOctagonColor, false)
 		visibility(heDiamondSize, false)
 		visibility(heDiamondColor, false)
 	end
@@ -211,6 +225,14 @@ local function on_paintGrenade(ctx)
 			visibility(fPentagonColor, false)
 		end
 
+		if contains(stylebox, "Octagon") then
+			visibility(fOctagonSize, true)
+			visibility(fOctagonColor, true)
+		else
+			visibility(fOctagonSize, false)
+			visibility(fOctagonColor, false)
+		end
+
 		if contains(stylebox, "Diamond") then
 			visibility(fDiamondSize, true)
 			visibility(fDiamondColor, true)
@@ -233,6 +255,8 @@ local function on_paintGrenade(ctx)
 		visibility(fInvertedTriangleColor, false)
 		visibility(fPentagonSize, false)
 		visibility(fPentagonColor, false)
+		visibility(fOctagonSize, false)
+		visibility(fOctagonColor, false)
 		visibility(fDiamondSize, false)
 		visibility(fDiamondColor, false)
 	end
@@ -469,6 +493,50 @@ local function on_paintGrenade(ctx)
 		end
 	end
 
+	if contains(stylebox, "Octagon") then
+		if getUi(heGrenadeCheckbox, true) and index == 323 then
+			if grenade ~= nil then
+				local hex, hey, hez = getProp(grenade, "m_vecOrigin")
+				local hewx, hewy = worldToScreen(hex, hey, hez)
+
+				if hewx ~= nil then
+					local her, heg, heb, hea = getUi(heOctagonColor)
+					local hesize = getUi(heOctagonSize)
+
+					renderLine(hewx - hesize / 2.3, hewy - hesize, hewx + hesize / 2.3, hewy - hesize, her, heg, heb, hea)
+					renderLine(hewx - hesize, hewy - hesize / 2.3, hewx - hesize, hewy + hesize / 2.3, her, heg, heb, hea)
+					renderLine(hewx - hesize / 2.3, hewy - hesize, hewx - hesize, hewy - hesize / 2.3, her, heg, heb, hea)
+					renderLine(hewx - hesize / 2.3, hewy + hesize, hewx + hesize / 2.3, hewy + hesize, her, heg, heb, hea)
+					renderLine(hewx + hesize, hewy - hesize / 2.3, hewx + hesize, hewy + hesize / 2.3, her, heg, heb, hea)
+					renderLine(hewx + hesize / 2.3, hewy - hesize, hewx + hesize, hewy - hesize / 2.3, her, heg, heb, hea)
+					renderLine(hewx - hesize, hewy + hesize / 2.3, hewx - hesize / 2.3, hewy + hesize, her, heg, heb, hea)
+					renderLine(hewx + hesize, hewy + hesize / 2.3, hewx + hesize / 2.3, hewy + hesize, her, heg, heb, hea)
+				end
+			end
+		end		
+
+		if getUi(fGrenadeCheckbox, true) and index == 324 then
+			if grenade ~= nil then
+				local fx, fy, fz = getProp(grenade, "m_vecOrigin")
+				local fwx, fwy = worldToScreen(fx, fy, fz)
+
+				if fwx ~= nil then
+					local fr, fg, fb, fa = getUi(fOctagonColor)
+					local fsize = getUi(fOctagonSize)
+
+					renderLine(fwx - fsize / 2.3, fwy - fsize, fwx + fsize / 2.3, fwy - fsize, fr, fg, fb, fa)
+					renderLine(fwx - fsize, fwy - fsize / 2.3, fwx - fsize, fwy + fsize / 2.3, fr, fg, fb, fa)
+					renderLine(fwx - fsize / 2.3, fwy - fsize, fwx - fsize, fwy - fsize / 2.3, fr, fg, fb, fa)
+					renderLine(fwx - fsize / 2.3, fwy + fsize, fwx + fsize / 2.3, fwy + fsize, fr, fg, fb, fa)
+					renderLine(fwx + fsize, fwy - fsize / 2.3, fwx + fsize, fwy + fsize / 2.3, fr, fg, fb, fa)
+					renderLine(fwx + fsize / 2.3, fwy - fsize, fwx + fsize, fwy - fsize / 2.3, fr, fg, fb, fa)
+					renderLine(fwx - fsize, fwy + fsize / 2.3, fwx - fsize / 2.3, fwy + fsize, fr, fg, fb, fa)
+					renderLine(fwx + fsize, fwy + fsize / 2.3, fwx + fsize / 2.3, fwy + fsize, fr, fg, fb, fa)
+				end
+			end
+		end
+	end
+
 	if contains(stylebox, "Diamond") then
 		if getUi(heGrenadeCheckbox, true) and index == 323 then
 			if grenade ~= nil then
@@ -525,6 +593,8 @@ local mInvertedTriangleSize = slider("Lua", "A", "Inverted triangle size", 0, 81
 local mInvertedTriangleColor = colorpicker("Lua", "A", "Inverted triangle size", 255, 255, 255, 255)
 local mPentagonSize = slider("Lua", "A", "Pentagon Size", 0, 81, 9)
 local mPentagonColor = colorpicker("Lua", "A", "Pentagon size", 255, 255, 255, 255)
+local mOctagonSize = slider("Lua", "A", "Octagon size", 0, 81, 9)
+local mOctagonColor = colorpicker("Lua", "A", "Octagon size", 255, 255, 255, 255)
 local mDiamondSize = slider("Lua", "A", "Diamond size", 0, 81, 9)
 local mDiamondColor = colorpicker("Lua", "A", "Diamond size", 255, 255, 255, 255)
 local mTextCheckbox = checkbox("Lua", "A", "Molotov text")
@@ -591,6 +661,14 @@ local function on_paintMolotov(ctx)
 			visibility(mPentagonColor, false)
 		end
 
+		if contains(stylebox, "Octagon") then
+			visibility(mOctagonSize, true)
+			visibility(mOctagonColor, true)
+		else
+			visibility(mOctagonSize, false)
+			visibility(mOctagonColor, false)
+		end
+
 		if contains(stylebox, "Diamond") then
 			visibility(mDiamondSize, true)
 			visibility(mDiamondColor, true)
@@ -613,6 +691,8 @@ local function on_paintMolotov(ctx)
 		visibility(mInvertedTriangleColor, false)
 		visibility(mPentagonSize, false)
 		visibility(mPentagonColor, false)
+		visibility(mOctagonSize, false)
+		visibility(mOctagonColor, false)
 		visibility(mDiamondSize, false)
 		visibility(mDiamondColor, false)
 	end
@@ -728,6 +808,27 @@ local function on_paintMolotov(ctx)
 			end
 		end
 
+		if contains(stylebox, "Octagon") then
+			if molotovGrenade ~= nil then
+				local mx, my, mz = getProp(molotovGrenade, "m_vecOrigin")
+				local mwx, mwy = worldToScreen(mx, my, mz)
+
+				if mwx ~= nile then
+					local mr, mg, mb, ma = getUi(mOctagonColor)
+					local msize = getUi(mOctagonSize)
+
+					renderLine(mwx - msize / 2.3, mwy - msize, mwx + msize / 2.3, mwy - msize, mr, mg, mb, ma)
+					renderLine(mwx - msize, mwy - msize / 2.3, mwx - msize, mwy + msize / 2.3, mr, mg, mb, ma)
+					renderLine(mwx - msize / 2.3, mwy - msize, mwx - msize, mwy - msize / 2.3, mr, mg, mb, ma)
+					renderLine(mwx - msize / 2.3, mwy + msize, mwx + msize / 2.3, mwy + msize, mr, mg, mb, ma)
+					renderLine(mwx + msize, mwy - msize / 2.3, mwx + msize, mwy + msize / 2.3, mr, mg, mb, ma)
+					renderLine(mwx + msize / 2.3, mwy - msize, mwx + msize, mwy - msize / 2.3, mr, mg, mb, ma)
+					renderLine(mwx - msize, mwy + msize / 2.3, mwx - msize / 2.3, mwy + msize, mr, mg, mb, ma)
+					renderLine(mwx + msize, mwy + msize / 2.3, mwx + msize / 2.3, mwy + msize, mr, mg, mb, ma)
+				end
+			end
+		end
+
 		if contains(stylebox, "Diamond") then
 			if molotovGrenade ~= nil then
 				local mx, my, mz = getProp(molotovGrenade, "m_vecOrigin")
@@ -765,6 +866,8 @@ local sInvertedTriangleSize = slider("Lua", "A", "Inverted triangle size", 0, 81
 local sInvertedTriangleColor = colorpicker("Lua", "A", "Inverted triangle size", 255, 255, 255, 255)
 local sPentagonSize = slider("Lua", "A", "Pentagon Size", 0, 81, 9)
 local sPentagonColor = colorpicker("Lua", "A", "Pentagon size", 255, 255, 255, 255)
+local sOctagonSize = slider("Lua", "A", "Octagon size", 0, 81, 9)
+local sOctagonColor = colorpicker("Lua", "A", "Octagon size", 255, 255, 255, 255)
 local sDiamondSize = slider("Lua", "A", "Diamond size", 0, 81, 9)
 local sDiamondColor = colorpicker("Lua", "A", "Diamond size", 255, 255, 255, 255)
 local sTextCheckbox = checkbox("Lua", "A", "Smoke text")
@@ -832,6 +935,14 @@ local function on_paintSmoke(ctx)
 			visibility(sPentagonColor, false)
 		end
 
+		if contains(stylebox, "Octagon") then
+			visibility(sOctagonSize, true)
+			visibility(sOctagonColor, true)
+		else
+			visibility(sOctagonSize, false)
+			visibility(sOctagonColor, false)
+		end
+
 		if contains(stylebox, "Diamond") then
 			visibility(sDiamondSize, true)
 			visibility(sDiamondColor, true)
@@ -854,6 +965,8 @@ local function on_paintSmoke(ctx)
 		visibility(sInvertedTriangleColor, false)
 		visibility(sPentagonSize, false)
 		visibility(sPentagonColor, false)
+		visibility(sOctagonSize, false)
+		visibility(sOctagonColor, false)
 		visibility(sDiamondSize, false)
 		visibility(sDiamondColor, false)
 	end
@@ -975,6 +1088,28 @@ local function on_paintSmoke(ctx)
 			end
 		end
 
+		if contains(stylebox, "Octagon") then
+			if smokeGrenade ~= nil then
+				local sx, sy, sz = getProp(smokeGrenade, "m_vecOrigin")
+				local swx, swy = worldToScreen(sx, sy, sz)
+
+				if swx ~= nil then
+					local sr, sg, sb, sa = getUi(sOctagonColor)
+					local ssize = getUi(sOctagonSize)
+
+					renderLine(swx - ssize / 2.3, swy - ssize, swx + ssize / 2.3, swy - ssize, sr, sg, sb, sa)
+					renderLine(swx - ssize, swy - ssize / 2.3, swx - ssize, swy + ssize / 2.3, sr, sg, sb, sa)
+					renderLine(swx - ssize / 2.3, swy - ssize, swx - ssize, swy - ssize / 2.3, sr, sg, sb, sa)
+					renderLine(swx - ssize / 2.3, swy + ssize, swx + ssize / 2.3, swy + ssize, sr, sg, sb, sa)
+					renderLine(swx + ssize, swy - ssize / 2.3, swx + ssize, swy + ssize / 2.3, sr, sg, sb, sa)
+					renderLine(swx + ssize / 2.3, swy - ssize, swx + ssize, swy - ssize / 2.3, sr, sg, sb, sa)
+					renderLine(swx - ssize, swy + ssize / 2.3, swx - ssize / 2.3, swy + ssize, sr, sg, sb, sa)
+					renderLine(swx + ssize, swy + ssize / 2.3, swx + ssize / 2.3, swy + ssize, sr, sg, sb, sa)
+				elseif ticks_created ~= nil then
+				end
+			end
+		end
+
 		if contains(stylebox, "Diamond") then
 			if smokeGrenade ~= nil then
 				local sx, sy, sz = getProp(smokeGrenade, "m_vecOrigin")
@@ -1004,6 +1139,16 @@ local boldTextCheckbox = checkbox("Lua", "A", "Bold text")
 
 local function on_paintText(ctx)
 	local flags = "c"
+
+	if getUi(heTextCheckbox, true) or getUi(fTextCheckbox, true) or getUi(mTextCheckbox, true) or getUi(sTextCheckbox, true) then
+		visibility(largeTextCheckbox, true)
+		visibility(smallTextCheckbox, true)
+		visibility(boldTextCheckbox, true)
+	else
+		visibility(largeTextCheckbox, false)
+		visibility(smallTextCheckbox, false)
+		visibility(boldTextCheckbox, false)
+	end
 
 	if getUi(largeTextCheckbox, true) then
 		flags = "c+"
